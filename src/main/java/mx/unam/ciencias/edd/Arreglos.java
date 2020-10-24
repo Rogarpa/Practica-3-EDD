@@ -2,6 +2,8 @@ package mx.unam.ciencias.edd;
 
 import java.util.Comparator;
 
+import javax.lang.model.element.Element;
+
 /**
  * Clase para ordenar y buscar arreglos genéricos.
  */
@@ -18,7 +20,33 @@ public class Arreglos {
      */
     public static <T> void
     quickSort(T[] arreglo, Comparator<T> comparador) {
-        // Aquí va su código.
+        quickSort(arreglo, 0, arreglo.length - 1, comparador);         
+    }
+
+    private static <T> void quickSort(T[] arreglo, int a, int b, Comparator<T> comparador){
+        if(b <= a) return;
+        int i = a +1;
+        int j = b;
+        while(i < j){
+            if(comparador.compare(arreglo[i], arreglo[a]) > 0 
+            && comparador.compare(arreglo[j], arreglo[a]) <= 0){
+                intercambia(arreglo, i, j);
+                i++;
+                j--;
+            }
+            else if(comparador.compare(arreglo[i], arreglo[a]) <= 0) i++;
+            else j--;
+        }
+        if(comparador.compare(arreglo[i], arreglo[a]) > 0 ) i--;
+        intercambia(arreglo, a, i);
+        quickSort(arreglo, a, i - 1, comparador); 
+        quickSort(arreglo, i + 1, b, comparador);
+    }
+
+    private static <T> void intercambia(T[] arreglo, int primeroAIntercambiar, int segundoAIntercambiar){
+        T aux = arreglo[primeroAIntercambiar];
+        arreglo[primeroAIntercambiar] = arreglo[segundoAIntercambiar];
+        arreglo[segundoAIntercambiar] = aux;
     }
 
     /**
@@ -39,7 +67,14 @@ public class Arreglos {
      */
     public static <T> void
     selectionSort(T[] arreglo, Comparator<T> comparador) {
-        // Aquí va su código.
+        int n = arreglo.length;
+        for(int i = 0; i < n-1; i++){
+            int m = i;
+            for(int j = i+1; j < n; j++){
+                if(comparador.compare(arreglo[j], arreglo[m]) < 0) m = j;
+            }
+            intercambia(arreglo, m, i);
+        }
     }
 
     /**
@@ -63,8 +98,15 @@ public class Arreglos {
      */
     public static <T> int
     busquedaBinaria(T[] arreglo, T elemento, Comparator<T> comparador) {
-        // Aquí va su código.
+        return busquedaBinaria(arreglo, 0, arreglo.length-1, elemento, comparador);
     }
+
+    private static <T> int busquedaBinaria (T[] arreglo, int a, int b, T elemento, Comparator<T> comparador){
+        if(b < a) return -1;
+        int divisor = a + ((b-a) >> 1);
+        if(comparador.compare(arreglo[divisor], elemento) == 0) return divisor;
+        else if(comparador.compare(elemento, arreglo[divisor]) < 0) return busquedaBinaria(arreglo, a, divisor-1, elemento, comparador);
+        else return busquedaBinaria(arreglo, divisor + 1, b, elemento, comparador);    }
 
     /**
      * Hace una búsqueda binaria del elemento en el arreglo. Regresa el índice
