@@ -23,12 +23,12 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
 
         /* Nos dice si hay un elemento siguiente. */
         @Override public boolean hasNext() {
-            // Aquí va su código.
+            return false;
         }
 
         /* Regresa el siguiente elemento en orden BFS. */
         @Override public T next() {
-            // Aquí va su código.
+            return null;
         }
     }
 
@@ -75,7 +75,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @return la altura del árbol.
      */
     @Override public int altura() {
-        // Aquí va su código.
+        return 0;
     }
 
     /**

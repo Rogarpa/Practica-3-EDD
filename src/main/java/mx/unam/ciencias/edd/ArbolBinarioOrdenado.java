@@ -25,17 +25,17 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
 
         /* Inicializa al iterador. */
         public Iterador() {
-            // Aquí va su código.
+
         }
 
         /* Nos dice si hay un elemento siguiente. */
         @Override public boolean hasNext() {
-            // Aquí va su código.
+            return false;
         }
 
         /* Regresa el siguiente elemento en orden DFS in-order. */
         @Override public T next() {
-            // Aquí va su código.
+            return null;
         }
     }
 
@@ -92,7 +92,7 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
      *         de <code>null</code>.
      */
     protected Vertice intercambiaEliminable(Vertice vertice) {
-        // Aquí va su código.
+        return null;
     }
 
     /**
@@ -113,7 +113,7 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
      *         encuentra; <code>null</code> en otro caso.
      */
     @Override public VerticeArbolBinario<T> busca(T elemento) {
-        // Aquí va su código.
+        return null;
     }
 
     /**
@@ -128,7 +128,7 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
      *         elemento al árbol.
      */
     public VerticeArbolBinario<T> getUltimoVerticeAgregado() {
-        // Aquí va su código.
+        return null;
     }
 
     /**
