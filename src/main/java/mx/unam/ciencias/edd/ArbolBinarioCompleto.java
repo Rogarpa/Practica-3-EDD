@@ -18,17 +18,22 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
 
         /* Inicializa al iterador. */
         public Iterador() {
-            // Aquí va su código.
+            cola = new Cola<Vertice>();
+            if(raiz != null) cola.mete(raiz);
         }
 
         /* Nos dice si hay un elemento siguiente. */
         @Override public boolean hasNext() {
-            return false;
+            return !(cola.esVacia());
         }
 
         /* Regresa el siguiente elemento en orden BFS. */
         @Override public T next() {
-            return null;
+            if(pila.esVacia()) throw new NoSuchElementException("Next a iterador sin elementos siguiente");
+            Vertice aux = cola.saca();
+            if(aux.izquierdo != null) cola.mete(aux.izquierdo);
+            if(aux.derecho != null) cola.mete(aux.derecho);
+            return aux;
         }
     }
 
@@ -56,7 +61,47 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      *         <code>null</code>.
      */
     @Override public void agrega(T elemento) {
-        // Aquí va su código.
+        //FEOOO y se puede sin realizar mults
+        if(elemento == null) throw new IllegalArgumentException();
+        Vertice aAgregar = new Vertice(elemento);
+        elemento++;
+
+        if(raiz == null) {
+            raiz = aAgregar;
+            return;
+        }
+
+        Vertice vaux = raiz;
+        int x, y, altura, intervalo;
+        y = altura = altura();
+        intervalo = 1;
+        
+        while(altura-- > 0) intervalo = intervalo<<1;
+        
+        x = elementos - intervalo >> 1; 
+        
+        while(y-- > 1){
+            if(x <= intervalo) {
+                vaux = vaux.izquierdo;
+                intervalo = intervalo >> 1;
+            }else{
+                vaux = vaux.derecho;
+                intervalo += intervalo >> 1; 
+            }
+        }
+
+        if((x % 2) == 0){
+            vaux.izquierdo = aAgregar;
+            ae    aAgregar.padre = vaux.izquierdo;
+        }else{
+            vaux.derecho = aAgregar;
+            aAgregar.padre = vaux.derecho;
+        }
+
+    }
+
+    private Vertice buscaCoordenado(int x, int y){
+
     }
 
     /**
@@ -66,7 +111,14 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @param elemento el elemento a eliminar.
      */
     @Override public void elimina(T elemento) {
-        // Aquí va su código.
+        VerticeArbolBinario<T> encontrado = super.busca(elemento);
+        if(encontrado == null) return;
+        elementos--;
+
+        if(elementos == 0) raiz = null;
+
+        
+
     }
 
     /**
