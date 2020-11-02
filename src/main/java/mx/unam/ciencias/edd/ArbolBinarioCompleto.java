@@ -29,11 +29,11 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
 
         /* Regresa el siguiente elemento en orden BFS. */
         @Override public T next() {
-            if(pila.esVacia()) throw new NoSuchElementException("Next a iterador sin elementos siguiente");
+            if(cola.esVacia()) throw new NoSuchElementException("Next a iterador sin elementos siguiente");
             Vertice aux = cola.saca();
             if(aux.izquierdo != null) cola.mete(aux.izquierdo);
             if(aux.derecho != null) cola.mete(aux.derecho);
-            return aux;
+            return aux.elemento;
         }
     }
 
@@ -61,49 +61,52 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      *         <code>null</code>.
      */
     @Override public void agrega(T elemento) {
-        //FEOOO y se puede sin realizar mults
-        if(elemento == null) throw new IllegalArgumentException();
-        Vertice aAgregar = new Vertice(elemento);
-        elemento++;
-
-        if(raiz == null) {
-            raiz = aAgregar;
-            return;
-        }
-
-        Vertice vaux = raiz;
-        int x, y, altura, intervalo;
-        y = altura = altura();
-        intervalo = 1;
+                //FEOOO y se puede sin realizar mults
+                if(elemento == null) throw new IllegalArgumentException();
+                Vertice aAgregar = new Vertice(elemento);
+                elemento++;
         
-        while(altura-- > 0) intervalo = intervalo<<1;
+                if(raiz == null) {
+                    raiz = aAgregar;
+                    return;
+                }
         
-        x = elementos - intervalo >> 1; 
+                int x, y, altura, intervalo;
+                Vertice padreUltimo;
+                y = altura();
+                intervalo = 1;
+                
+                for(int altura = y; altura > 0; altura--) intervalo = intervalo<<1;
+                x = elementos - intervalo >> 1;
+                
+                if((x % 2) == 0) padreUltimo = buscaCoordenado(x/2, y-1);
+                else padreUltimo = buscaCoordenado((x-1)/2, y-1);
+                
+                if((x % 2) == 0){
+                    padreUltimo.izquierdo = aAgregar;
+                    aAgregar.padre = padreUltimo.izquierdo;
+                }else{
+                    padreUltimo.derecho = aAgregar;
+                    aAgregar.padre = padreUltimo.derecho;
+                }
         
-        while(y-- > 1){
-            if(x <= intervalo) {
-                vaux = vaux.izquierdo;
-                intervalo = intervalo >> 1;
-            }else{
-                vaux = vaux.derecho;
-                intervalo += intervalo >> 1; 
             }
-        }
-
-        if((x % 2) == 0){
-            vaux.izquierdo = aAgregar;
-            ae    aAgregar.padre = vaux.izquierdo;
-        }else{
-            vaux.derecho = aAgregar;
-            aAgregar.padre = vaux.derecho;
-        }
-
-    }
-
-    private Vertice buscaCoordenado(int x, int y){
-
-    }
-
+        
+            private Vertice buscaCoordenado(int x, int y){
+                Vertice vaux = raiz;
+                int intervalo;
+                while(y-- > 0){
+                    if(x <= intervalo) {
+                        vaux = vaux.izquierdo;
+                        intervalo = intervalo >> 1;
+                    }else{
+                        vaux = vaux.derecho;
+                        intervalo += intervalo >> 1; 
+                    }
+                }
+                return vaux;
+            }
+        
     /**
      * Elimina un elemento del árbol. El elemento a eliminar cambia lugares con
      * el último elemento del árbol al recorrerlo por BFS, y entonces es
@@ -111,14 +114,34 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @param elemento el elemento a eliminar.
      */
     @Override public void elimina(T elemento) {
-        VerticeArbolBinario<T> encontrado = super.busca(elemento);
+        if(elementos == null) return;
+
+        Vertice encontrado = vertice(super.busca(elemento));
         if(encontrado == null) return;
         elementos--;
 
-        if(elementos == 0) raiz = null;
+        if(elementos == 0) {
+            raiz = null;
+            return;
+        }
 
+        int x,y;
+
+        int x, y, altura, intervalo;
+        y = altura = altura();
+        intervalo = 1;
         
+        while(altura-- > 0) intervalo = intervalo<<1;
+        x = elementos - intervalo >> 1; 
 
+        Vertice aCambiar = buscaCoordenado(x, y);
+        T aux;
+        aux = aCambiar.elemento;
+        aCambiar.elemento = encontrado.elemento;
+        encontrado.elemento = aux;
+
+        if(aCambiar.padre.izquierdo == aCambiar) aCambiar.padre.izquierdo = null;
+        else aCambiar.padre.derecho = null;
     }
 
     /**
@@ -127,8 +150,13 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @return la altura del árbol.
      */
     @Override public int altura() {
-        return 0;
-    }
+        int altura = 0;
+        int n = elementos;
+        while(n != 0 || n != 1){
+            n = n>>1;
+            altura++;
+        }
+        return altura;    }
 
     /**
      * Realiza un recorrido BFS en el árbol, ejecutando la acción recibida en
@@ -136,7 +164,16 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @param accion la acción a realizar en cada elemento del árbol.
      */
     public void bfs(AccionVerticeArbolBinario<T> accion) {
-        // Aquí va su código.
+        Cola<Vertice> cola = new Cola<Vertice>();
+        if(raiz == null) return;
+        cola.mete(raiz);
+        Vertice aux;
+        while(! cola.esVacia()){
+            aux = cola.saca();
+            accion.actua(aux);
+            if(aux.izquierdo != null) cola.mete(aux.izquierdo);
+            if(aux.derecho != null) cola.mete(aux.derecho);
+        }
     }
 
     /**
