@@ -60,9 +60,10 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      *         <code>null</code>.
      */
     @Override public void agrega(T elemento) {
-                //FEOOO y se puede sin realizar mults
-                if(elemento == null) throw new IllegalArgumentException();
-                Vertice aAgregar = new Vertice(elemento);
+System.out.println("INICIA AGREGA");
+        //FEOOO y se puede sin realizar mults
+                if(elemento == null) throw new IllegalArgumentException("No es posible agregar elementos nulos a un arbol binario completo.");
+                Vertice aAgregar = nuevoVertice(elemento);
                 elementos++;
         
                 if(raiz == null) {
@@ -75,12 +76,18 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
                 y = altura();
                 intervalo = 1;
                 
+
                 for(int altura = y; altura > 0; altura--) intervalo = intervalo<<1;
-                x = elementos - intervalo >> 1;
-                
+                x = elementos - intervalo >> 1 -1;
+
+                System.out.println("Implantará en x , y"  + x + " " + y);
                 if((x % 2) == 0) padreUltimo = buscaCoordenado(x/2, y-1);
                 else padreUltimo = buscaCoordenado((x-1)/2, y-1);
+                if((x %2)  == 0 && x/2 == 1 && y-1 == 1) padreUltimo = raiz.derecho;
+                if((x %2)  == 0 && (x-1)/2 == 1 && y-1 == 1) padreUltimo = raiz.derecho;
                 
+                System.out.println("padreUltimo " + padreUltimo);
+
                 if((x % 2) == 0){
                     padreUltimo.izquierdo = aAgregar;
                     aAgregar.padre = padreUltimo.izquierdo;
@@ -149,7 +156,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
     @Override public int altura() {
         int altura = 0;
         int n = elementos;
-        while(n != 0 || n != 1){
+        while(! (n == 0 || n == 1)){
             n = n>>1;
             altura++;
         }

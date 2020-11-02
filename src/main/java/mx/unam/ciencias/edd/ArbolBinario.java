@@ -294,27 +294,29 @@ public abstract class ArbolBinario<T> implements Coleccion<T> {
     }
 
     private String toString(Vertice v, int l, boolean[] A){
-        String s = v.elemento.toString() + "\n";
+        String s = v.toString() + "\n";
         A[l] = true;
+        
         if(v.izquierdo != null && v.derecho != null){
             s += dibujaEspacios(l, A);
             s += "├─›";
             s += toString(v.izquierdo, l+1, A);
             s += dibujaEspacios(l, A);
             s += "└─»";
+        
+            A[l] = false;
+
             s += toString(v.derecho, l+1, A);
-        }
-        if(v.izquierdo != null){
+        }else if(v.izquierdo != null){
             s += dibujaEspacios(l, A);
             s += "└─›";
             A[l] = false;
-            s += toString(v.izquierdo, l, A);
-        }
-        if(v.derecho != null){
+            s += toString(v.izquierdo, l+1, A);
+        }else if(v.derecho != null){
             s += dibujaEspacios(l, A);
             s += "└─›";
             A[l] = false;
-            s += toString(v.izquierdo, l, A);
+            s += toString(v.izquierdo, l+1, A);
         }
         return s;
     }
