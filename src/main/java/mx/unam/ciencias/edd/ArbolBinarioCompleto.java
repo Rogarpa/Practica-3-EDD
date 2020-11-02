@@ -60,59 +60,40 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      *         <code>null</code>.
      */
     @Override public void agrega(T elemento) {
-System.out.println("INICIA AGREGA");
-        //FEOOO y se puede sin realizar mults
-                if(elemento == null) throw new IllegalArgumentException("No es posible agregar elementos nulos a un arbol binario completo.");
-                Vertice aAgregar = nuevoVertice(elemento);
-                elementos++;
+        if(elemento == null) throw new IllegalArgumentException();
         
-                if(raiz == null) {
-                    raiz = aAgregar;
+        Vertice h = nuevoVertice(elemento);
+        
+        
+        elementos++;
+        
+        if(raiz == null){ 
+            raiz = h;
+            return;
+        }else{
+            
+            Cola<Vertice> c = new Cola<Vertice>();
+            Vertice v; 
+            c.mete(raiz);
+            while(!(c.esVacia()) ){
+                v = c.saca();
+                
+                if(v.izquierdo == null){
+                    v.izquierdo = h;
+                    h.padre = v;
                     return;
                 }
-        
-                int x, y, intervalo;
-                Vertice padreUltimo;
-                y = altura();
-                intervalo = 1;
-                
-
-                for(int altura = y; altura > 0; altura--) intervalo = intervalo<<1;
-                x = elementos - intervalo >> 1 -1;
-
-                System.out.println("Implantará en x , y"  + x + " " + y);
-                if((x % 2) == 0) padreUltimo = buscaCoordenado(x/2, y-1);
-                else padreUltimo = buscaCoordenado((x-1)/2, y-1);
-                if((x %2)  == 0 && x/2 == 1 && y-1 == 1) padreUltimo = raiz.derecho;
-                if((x %2)  == 0 && (x-1)/2 == 1 && y-1 == 1) padreUltimo = raiz.derecho;
-                
-                System.out.println("padreUltimo " + padreUltimo);
-
-                if((x % 2) == 0){
-                    padreUltimo.izquierdo = aAgregar;
-                    aAgregar.padre = padreUltimo.izquierdo;
-                }else{
-                    padreUltimo.derecho = aAgregar;
-                    aAgregar.padre = padreUltimo.derecho;
+                if(v.derecho == null){
+                    v.derecho = h;
+                    h.padre = v;
+                    return;    
                 }
-        
+                
+                c.mete(v.izquierdo);
+                c.mete(v.derecho);
             }
-        
-            private Vertice buscaCoordenado(int x, int y){
-                Vertice vaux = raiz;
-                int intervalo = 1;
-                while(y-- > 0){
-                    if(x <= intervalo) {
-                        vaux = vaux.izquierdo;
-                        intervalo = intervalo >> 1;
-                    }else{
-                        vaux = vaux.derecho;
-                        intervalo += intervalo >> 1; 
-                    }
-                }
-                return vaux;
-            }
-        
+        }
+    }
     /**
      * Elimina un elemento del árbol. El elemento a eliminar cambia lugares con
      * el último elemento del árbol al recorrerlo por BFS, y entonces es
@@ -121,31 +102,40 @@ System.out.println("INICIA AGREGA");
      */
     @Override public void elimina(T elemento) {
         if(elemento == null) return;
-
-        Vertice encontrado = vertice(super.busca(elemento));
-        if(encontrado == null) return;
-        elementos--;
-
-        if(elementos == 0) {
-            raiz = null;
-            return;
-        }
-
-        int x, y, altura, intervalo;
-        y = altura = altura();
-        intervalo = 1;
         
-        while(altura-- > 0) intervalo = intervalo<<1;
-        x = elementos - intervalo >> 1; 
-
-        Vertice aCambiar = buscaCoordenado(x, y);
-        T aux;
-        aux = aCambiar.elemento;
-        aCambiar.elemento = encontrado.elemento;
-        encontrado.elemento = aux;
-
-        if(aCambiar.padre.izquierdo == aCambiar) aCambiar.padre.izquierdo = null;
-        else aCambiar.padre.derecho = null;
+        Vertice h = vertice(busca(elemento)), aux = null;
+        
+        if(h == null) return;
+        
+        else{
+            elementos--;
+            if(elementos == 0){ 
+                raiz = null;
+                return;
+            }
+            
+            int i = 0;
+            
+            Cola<Vertice> c = new Cola<Vertice>();
+            Vertice v; 
+            
+            c.mete(raiz);
+            
+            while(!(c.esVacia())){
+                v = c.saca();
+                i++;
+                if(i == elementos + 1) aux = v;
+                
+                if(v.izquierdo != null)    c.mete(v.izquierdo);
+                if(v.derecho != null)    c.mete(v.derecho);
+            }
+            
+            
+            h.elemento = aux.elemento;
+            if(aux.padre.derecho == null) aux.padre.izquierdo = null;
+            else aux.padre.derecho = null;
+            
+        }
     }
 
     /**
