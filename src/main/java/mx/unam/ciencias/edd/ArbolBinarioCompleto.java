@@ -29,7 +29,6 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
 
         /* Regresa el siguiente elemento en orden BFS. */
         @Override public T next() {
-            if(cola.esVacia()) throw new NoSuchElementException("Next a iterador sin elementos siguiente");
             Vertice aux = cola.saca();
             if(aux.izquierdo != null) cola.mete(aux.izquierdo);
             if(aux.derecho != null) cola.mete(aux.derecho);
@@ -64,14 +63,14 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
                 //FEOOO y se puede sin realizar mults
                 if(elemento == null) throw new IllegalArgumentException();
                 Vertice aAgregar = new Vertice(elemento);
-                elemento++;
+                elementos++;
         
                 if(raiz == null) {
                     raiz = aAgregar;
                     return;
                 }
         
-                int x, y, altura, intervalo;
+                int x, y, intervalo;
                 Vertice padreUltimo;
                 y = altura();
                 intervalo = 1;
@@ -94,7 +93,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
         
             private Vertice buscaCoordenado(int x, int y){
                 Vertice vaux = raiz;
-                int intervalo;
+                int intervalo = 1;
                 while(y-- > 0){
                     if(x <= intervalo) {
                         vaux = vaux.izquierdo;
@@ -114,7 +113,7 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @param elemento el elemento a eliminar.
      */
     @Override public void elimina(T elemento) {
-        if(elementos == null) return;
+        if(elemento == null) return;
 
         Vertice encontrado = vertice(super.busca(elemento));
         if(encontrado == null) return;
@@ -124,8 +123,6 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
             raiz = null;
             return;
         }
-
-        int x,y;
 
         int x, y, altura, intervalo;
         y = altura = altura();
