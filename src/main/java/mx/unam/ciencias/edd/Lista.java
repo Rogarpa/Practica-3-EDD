@@ -1,6 +1,5 @@
 package mx.unam.ciencias.edd;
 
-import java.nio.channels.NonWritableChannelException;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;

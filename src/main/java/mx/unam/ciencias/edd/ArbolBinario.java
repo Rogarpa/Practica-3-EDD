@@ -288,58 +288,46 @@ public abstract class ArbolBinario<T> implements Coleccion<T> {
      */
     @Override public String toString() {
         if(raiz == null) return "";
-    
-    
-        int altura = altura();
-        boolean[] a = new boolean[altura + 1];
 
-        for(int i = 0; i < altura + 1; i++ ) a[i] = false;
-        return toString(raiz, 0, a);
+        boolean[] A = new boolean[raiz.altura() + 1];
+        return toString(raiz, 0, A);
     }
-    
-    private String dibujaespacios(int l, boolean[] a){
-        
+
+    private String toString(Vertice v, int l, boolean[] A){
+        String s = v.elemento.toString() + "\n";
+        A[l] = true;
+        if(v.izquierdo != null && v.derecho != null){
+            s += dibujaEspacios(l, A);
+            s += "├─›";
+            s += toString(v.izquierdo, l+1, A);
+            s += dibujaEspacios(l, A);
+            s += "└─»";
+            s += toString(v.derecho, l+1, A);
+        }
+        if(v.izquierdo != null){
+            s += dibujaEspacios(l, A);
+            s += "└─›";
+            A[l] = false;
+            s += toString(v.izquierdo, l, A);
+        }
+        if(v.derecho != null){
+            s += dibujaEspacios(l, A);
+            s += "└─›";
+            A[l] = false;
+            s += toString(v.izquierdo, l, A);
+        }
+        return s;
+    }
+
+    private String dibujaEspacios(int l, boolean[] A){
         String s = "";
-        for(int i = 0; i <= (l-1); i++){
-            if(a[i]) s += "│  ";
+        for(int i = 0; i<l; i++){
+            if(A[i]) s += "|  ";
             else s += "   ";
         }
-        
         return s;
-        
     }
-    
-    
-    
-    private String toString(Vertice v, int l, boolean[] a){
-        String s = v.toString() + "\n";
-        a[l] = true;
 
-        if(v.izquierdo != null && v.derecho != null){
-            s += dibujaespacios(l,a);
-            s += "├─›" ;
-            s += toString(v.izquierdo, l+1, a);
-            s += dibujaespacios(l, a);
-            s += "└─»";
-            a[l] = false;
-            s += toString(v.derecho, l+1, a);
-        }
-        else if(v.izquierdo != null){
-            s += dibujaespacios(l, a);
-            s += "└─›";
-            a[l] = false;
-            s += toString(v.izquierdo, l+1, a);
-        }
-        else if(v.derecho != null){
-            s += dibujaespacios(l, a);
-            s += "└─»";
-            a[l] = false;
-            s += toString(v.derecho, l+1, a);
-        }
-        
-        return s;
-    }
-    
     /**
      * Convierte el vértice (visto como instancia de {@link
      * VerticeArbolBinario}) en vértice (visto como instancia de {@link
