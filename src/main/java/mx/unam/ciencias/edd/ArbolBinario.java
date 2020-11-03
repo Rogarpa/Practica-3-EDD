@@ -229,7 +229,7 @@ public abstract class ArbolBinario<T> implements Coleccion<T> {
         if(v == null) return null;
 
         VerticeArbolBinario<T> aux;
-        if(v.elemento.equals(elemento)) return raiz;
+        if(v.elemento.equals(elemento)) return v;
         
         aux = busca(elemento, v.izquierdo);
         if(aux != null) return aux;
