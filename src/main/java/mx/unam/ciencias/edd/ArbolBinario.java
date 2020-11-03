@@ -136,6 +136,7 @@ public abstract class ArbolBinario<T> implements Coleccion<T> {
             else if((izquierdo == null ^ vertice.izquierdo == null) || (derecho == null ^ vertice.derecho == null)) return false;
             else if(izquierdo == null && derecho != null) return derecho.equals(vertice.derecho);
             else if(izquierdo != null && derecho == null) return izquierdo.equals(vertice.izquierdo);
+            else if(izquierdo != null && derecho != null) return izquierdo.equals(vertice.izquierdo) && derecho.equals(vertice.derecho);
             else return true;
         }
 
@@ -324,7 +325,7 @@ public abstract class ArbolBinario<T> implements Coleccion<T> {
     private String dibujaEspacios(int l, boolean[] A){
         String s = "";
         for(int i = 0; i<l; i++){
-            if(A[i]) s += "|  ";
+            if(A[i]) s += "│  ";
             else s += "   ";
         }
         return s;

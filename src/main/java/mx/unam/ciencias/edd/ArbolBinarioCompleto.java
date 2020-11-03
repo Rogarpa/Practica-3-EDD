@@ -144,13 +144,15 @@ public class ArbolBinarioCompleto<T> extends ArbolBinario<T> {
      * @return la altura del árbol.
      */
     @Override public int altura() {
+        if(raiz == null) return -1;
         int altura = 0;
         int n = elementos;
         while(! (n == 0 || n == 1)){
             n = n>>1;
             altura++;
         }
-        return altura;    }
+        return altura;    
+    }
 
     /**
      * Realiza un recorrido BFS en el árbol, ejecutando la acción recibida en
